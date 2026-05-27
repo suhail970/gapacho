@@ -5,6 +5,7 @@ import com.ecommerce.gapacho.dto.ProductResponseDto;
 import com.ecommerce.gapacho.services.ProductServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +20,16 @@ public class ProductController {
     private ProductServices productServices;
 
     @GetMapping("/products")
-    public List<ProductResponseDto> getAllProducts(){
-        List<ProductResponseDto> product = productServices.getAllProducts();
-        return product;
+    public List<ProductResponseDto> getAllProducts(@RequestParam @DefaultValue("0") int pageNo, @RequestParam @DefaultValue("3") int pageSize ){
+        List<ProductResponseDto> products = productServices.getAllProducts(pageNo, pageSize);
+        return products;
     }
 
+    @GetMapping("/products/search")
+    public List<ProductResponseDto> getFilteredProduct(@RequestParam(required = false) String searchText , @RequestParam(required = false) String category){
+        List<ProductResponseDto> products = productServices.getFilteredProduct(searchText, category);
+        return products;
+    }
 
     @PostMapping
     public ResponseEntity<String> createProduct(@Valid @RequestBody ProductRequestDto productDto){

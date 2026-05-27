@@ -1,8 +1,5 @@
 package com.ecommerce.gapacho.dto;
 
-import com.ecommerce.gapacho.entity.ProductImage;
-import com.ecommerce.gapacho.entity.ProductReview;
-
 import java.util.List;
 
 public class ProductResponseDto {
@@ -23,7 +20,7 @@ public class ProductResponseDto {
 
     private List<ProductImageDto> images;
 
-    private List<ProductReviewDto> reviews;
+    private List<ProductReviewResponseDto> reviews;
 
 
     public ProductResponseDto() {
@@ -78,10 +75,10 @@ public class ProductResponseDto {
     public void setImages(List<ProductImageDto> images) {
         this.images = images;
     }
-    public List<ProductReviewDto> getReviews() {
+    public List<ProductReviewResponseDto> getReviews() {
         return reviews;
     }
-    public void setReviews(List<ProductReviewDto> reviews) {
+    public void setReviews(List<ProductReviewResponseDto> reviews) {
         this.reviews = reviews;
     }
 
