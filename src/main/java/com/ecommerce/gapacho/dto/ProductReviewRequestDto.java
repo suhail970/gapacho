@@ -1,23 +1,29 @@
 package com.ecommerce.gapacho.dto;
 
-import com.ecommerce.gapacho.entity.Product;
 import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
-public class ProductReviewDto {
+public class ProductReviewRequestDto {
+
     private Long id;
 
+    @NotNull(message = "Id Field should be filled!")
+    private Long productId;
+
     @NotNull(message = "Ratings Field should be filled!")
-    private Double ratings = 0.0;
+    private Double ratings;
 
     private String comment;
 
-    public ProductReviewDto(Double ratings, String comment, Long id) {
+    public ProductReviewRequestDto(Long id,Double ratings, String comment) {
         this.ratings = ratings;
         this.comment = comment;
         this.id = id;
     }
-    public ProductReviewDto() {
+    public ProductReviewRequestDto() {
     }
 
 
@@ -38,5 +44,12 @@ public class ProductReviewDto {
     }
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }
