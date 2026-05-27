@@ -1,11 +1,12 @@
 package com.ecommerce.gapacho.controller;
 
-import com.ecommerce.gapacho.entity.Product;
+import com.ecommerce.gapacho.dto.ProductRequestDto;
+import com.ecommerce.gapacho.dto.ProductResponseDto;
 import com.ecommerce.gapacho.services.ProductServices;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,12 +15,20 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProductController {
 
+    @Autowired
     private ProductServices productServices;
 
     @GetMapping("/products")
-    public List<Product> getAllProducts(){
-        List<Product> product = productServices.getAllProducts();
+    public List<ProductResponseDto> getAllProducts(){
+        List<ProductResponseDto> product = productServices.getAllProducts();
         return product;
+    }
+
+
+    @PostMapping
+    public ResponseEntity<String> createProduct(@Valid @RequestBody ProductRequestDto productDto){
+        productServices.createProduct(productDto);
+        return ResponseEntity.ok().body("Product added SuccessFully Gapacho!");
     }
 
 

@@ -7,23 +7,22 @@ import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "product_images")
-public class ProductImages {
+public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String url;
 
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String publicUrl;
 
-    public ProductImages(Long id, String publicUrl) {
-        this.id = id;
+    public ProductImage(String publicUrl, Product product) {
         this.publicUrl = publicUrl;
-        this.url = "uploads"+publicUrl;
     }
-    public ProductImages() {
+    public ProductImage() {
     }
 
 

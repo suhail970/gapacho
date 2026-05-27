@@ -1,51 +1,34 @@
-package com.ecommerce.gapacho.entity;
+package com.ecommerce.gapacho.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-@Entity
-@Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductRequestDto {
     private Long id;
 
     @NotBlank(message = "Name Field must not be blank!")
-    @Column(nullable = false)
     private String name;
 
     @NotNull(message = "Price Field must not be blank!")
-    @Column(nullable = false)
     private Double price;
 
     @NotBlank(message = "Category field must not be Blank!")
-    @Column(nullable = false)
     private String category;
 
     @NotBlank(message = "Category field must not be Blank!")
-    @Column(nullable = false)
     private String description;
 
     @NotBlank(message = "Seller field must not be Blank!")
-    @Column(nullable = false)
     private String seller;
 
-    private Long numberOfReviews = 0L;
-
-    @DecimalMin("0.0")
-    @DecimalMax("5.0")
-    private Double ratings = 0.0;
+    private List<ProductImageDto> images;
 
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
-    private List<ProductImage> images;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,  mappedBy = "product")
-    private List<ProductReview> reviews;
-
-    public Product(Long id, String name, Double price, String category, String description, String seller, List<ProductImage> images) {
+    public ProductRequestDto(Long id, String name, Double price, String category, String description, String seller, List<ProductImageDto> images) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -54,7 +37,7 @@ public class Product {
         this.seller = seller;
         this.images = images;
     }
-    public Product() {
+    public ProductRequestDto() {
     }
     public Long getId() {
         return id;
@@ -92,31 +75,12 @@ public class Product {
     public void setSeller(String seller) {
         this.seller = seller;
     }
-    public Long getNumberOfReviews() {
-        return numberOfReviews;
-    }
-    public void setNumberOfReviews(Long numberOfReviews) {
-        this.numberOfReviews = numberOfReviews;
-    }
-    public Double getRatings() {
-        return ratings;
-    }
-    public void setRatings(Double ratings) {
-        this.ratings = ratings;
-    }
 
-    public List<ProductImage> getImages() {
+    public List<ProductImageDto> getImages() {
         return images;
     }
-    public void setImages(List<ProductImage> images) {
+    public void setImages(List<ProductImageDto> images) {
         this.images = images;
     }
-    public List<ProductReview> getReviews() {
-        return reviews;
-    }
-    public void setReviews(List<ProductReview> reviews) {
-        this.reviews = reviews;
-    }
-
 
 }

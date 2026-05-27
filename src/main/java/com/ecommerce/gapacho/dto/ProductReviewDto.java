@@ -1,30 +1,23 @@
-package com.ecommerce.gapacho.entity;
+package com.ecommerce.gapacho.dto;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.ecommerce.gapacho.entity.Product;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "product_reviews")
-public class ProductReviews {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductReviewDto {
     private Long id;
 
     @NotNull(message = "Ratings Field should be filled!")
-    @Column(nullable = false)
     private Double ratings = 0.0;
 
     private String comment;
 
-    public ProductReviews(Double ratings, String comment, Product product, Long id) {
+    public ProductReviewDto(Double ratings, String comment, Long id) {
         this.ratings = ratings;
         this.comment = comment;
-        this.product = product;
         this.id = id;
     }
-    public ProductReviews() {
+    public ProductReviewDto() {
     }
 
 
@@ -45,17 +38,5 @@ public class ProductReviews {
     }
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    @JsonIgnore
-    private Product product;
-
-    public Product getProduct() {
-        return product;
-    }
-    public void setProduct(Product product) {
-        this.product = product;
     }
 }
