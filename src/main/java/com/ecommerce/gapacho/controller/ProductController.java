@@ -1,5 +1,6 @@
 package com.ecommerce.gapacho.controller;
 
+import com.ecommerce.gapacho.dto.GetAllProductResponseDto;
 import com.ecommerce.gapacho.dto.ProductRequestDto;
 import com.ecommerce.gapacho.dto.ProductResponseDto;
 import com.ecommerce.gapacho.dto.ProductUpdateRequestDto;
@@ -34,8 +35,8 @@ public class ProductController {
 
 
     @GetMapping("/search")
-    public List<ProductResponseDto> getFilteredProduct(@RequestParam(required = false) String searchText , @RequestParam(required = false) String category){
-        List<ProductResponseDto> products = productServices.getFilteredProduct(searchText, category);
+    public List<GetAllProductResponseDto> getFilteredProduct(@RequestParam(required = false) String searchText , @RequestParam(required = false) String category){
+        List<GetAllProductResponseDto> products = productServices.getFilteredProduct(searchText, category);
         return products;
     }
 

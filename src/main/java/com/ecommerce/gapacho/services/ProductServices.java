@@ -52,7 +52,7 @@ public class ProductServices {
         return response;
     }
 
-    public List<ProductResponseDto> getFilteredProduct(String searchText, String category){
+    public List<GetAllProductResponseDto> getFilteredProduct(String searchText, String category){
         Specification<Product> spec = Specification.where((from, cb) -> cb.conjunction());
         if(searchText != null){
             spec = spec.and(productSpec.filterSearch(searchText));
@@ -63,14 +63,31 @@ public class ProductServices {
         Sort sort = Sort.by("price").ascending();
         List<Product> response = productRepository.findAll(spec,sort);
 
-        List<ProductResponseDto> responseDto = new ArrayList<>();
+        List<GetAllProductResponseDto> responseDto = new ArrayList<>();
 
         for(Product product:response){
-            ProductResponseDto dto = convertToDto(product);
+            GetAllProductResponseDto dto = convertToDtoAll(product);
             responseDto.add(dto);
         }
 
         return responseDto;
+    }
+
+    public GetAllProductResponseDto convertToDtoAll(Product product){
+        GetAllProductResponseDto dto = new GetAllProductResponseDto();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setPrice(product.getPrice());
+        dto.setCategory(product.getCategory());
+        dto.setSeller(product.getSeller());
+        dto.setRatings(product.getRatings());
+        dto.setNumberOfReviews(product.getNumberOfReviews());
+
+        ProductImageDto imgDto = new ProductImageDto();
+        imgDto.setPublicUrl(product.getImages().getFirst().getPublicUrl());
+        dto.setImages(imgDto);
+
+        return dto;
     }
 
     public ProductResponseDto convertToDto(Product product) {
