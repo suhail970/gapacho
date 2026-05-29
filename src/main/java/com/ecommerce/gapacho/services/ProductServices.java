@@ -1,9 +1,6 @@
 package com.ecommerce.gapacho.services;
 
-import com.ecommerce.gapacho.dto.ProductRequestDto;
-import com.ecommerce.gapacho.dto.ProductImageDto;
-import com.ecommerce.gapacho.dto.ProductResponseDto;
-import com.ecommerce.gapacho.dto.ProductReviewResponseDto;
+import com.ecommerce.gapacho.dto.*;
 import com.ecommerce.gapacho.entity.Product;
 import com.ecommerce.gapacho.entity.ProductImage;
 import com.ecommerce.gapacho.entity.ProductReview;
@@ -18,7 +15,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServices {
@@ -29,14 +28,28 @@ public class ProductServices {
     @Autowired
     private ProductSpecification productSpec;
 
-    public List<ProductResponseDto> getAllProducts(int pageNo, int pageSize){
+    public ProductResponseDto getProduct(Long id){
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product Id Not Found!"));
+        ProductResponseDto responseDto = convertToDto(product);
+        return responseDto;
+    }
+
+    public Map<String, Object> getAllProducts(int pageNo, int pageSize){
         Pageable pages = PageRequest.of(pageNo, pageSize);
         Page<Product> products = productRepository.findAll(pages);
+        Integer pageNo1 = products.getNumber();
+        Integer pageSize1 = products.getSize();
         List<ProductResponseDto> productsDto = new ArrayList<>();
         for(Product product:products) {
             productsDto.add(convertToDto(product));
         }
-        return productsDto;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("PageNo",pageNo1);
+        response.put("PageSize",pageSize1);
+        response.put("products",productsDto);
+        
+        return response;
     }
 
     public List<ProductResponseDto> getFilteredProduct(String searchText, String category){
@@ -111,8 +124,49 @@ public class ProductServices {
 
             product.setImages(productImage);
         }
-
         productRepository.save(product);
-
     }
+
+    public void updateProduct(
+            Long productId,
+            ProductUpdateRequestDto productUpdateDto
+    ){
+        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product Id Not Found!"));
+
+        if(productUpdateDto.getName() != null){
+            product.setName(productUpdateDto.getName());
+        }
+        if(productUpdateDto.getPrice() != null){
+            product.setPrice(productUpdateDto.getPrice());
+        }
+        if(productUpdateDto.getCategory() != null){
+            product.setCategory(productUpdateDto.getCategory());
+        }
+        if(productUpdateDto.getDescription() != null){
+            product.setDescription(productUpdateDto.getDescription());
+        }
+        if(productUpdateDto.getSeller() != null){
+            product.setSeller(productUpdateDto.getSeller());
+        }
+
+        if(productUpdateDto.getImages() != null){
+            product.getImages().clear();
+            List<ProductImage> productImage = new ArrayList<>();
+            for(ProductImageDto img: productUpdateDto.getImages()){
+                ProductImage proImg = new ProductImage();
+                proImg.setPublicUrl(img.getPublicUrl());
+                proImg.setUrl(img.getPublicUrl());
+                proImg.setProduct(product);
+                productImage.add(proImg);
+            }
+            product.setImages(productImage);
+        }
+        productRepository.save(product);
+    }
+
+    public void deleteProduct(Long id){
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("ProductId not Found!"));
+        productRepository.delete(product);
+    }
+
 }

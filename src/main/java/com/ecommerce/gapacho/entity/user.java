@@ -2,6 +2,7 @@ package com.ecommerce.gapacho.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class user {
 
     @NotBlank(message = "The Gmail field is requiresd!")
     @Column(nullable = false)
+    @Email
     private String gmail;
 
     @NotBlank(message = "The Password field is required!")
